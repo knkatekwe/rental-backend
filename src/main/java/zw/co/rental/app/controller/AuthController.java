@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ import zw.co.rental.app.repository.UserRepository;
 import zw.co.rental.app.security.jwt.JwtUtils;
 import zw.co.rental.app.service.impl.UserDetailsImpl;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -148,4 +149,29 @@ public class AuthController {
 			return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
 		
 	}
+	
+	@PutMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateUser(@RequestBody User user) {
+
+//		try {
+			
+			User _user = new User();
+			
+			_user.setId(user.getId());
+			_user.setEmail(user.getEmail());
+			_user.setPhoneNumber(user.getPhoneNumber());
+			_user.setProfileImage(user.getProfileImage());
+			_user.setUsername(user.getUsername());
+			_user.setWalletAddress(user.getWalletAddress());
+			_user.setPassword(encoder.encode(user.getPassword()));
+
+			return new ResponseEntity<>(userRepository.saveAndFlush(_user), HttpStatus.OK);
+
+//		} catch (Exception e) {
+//			return new ResponseEntity<>(new MessageResponse("Oops!, failed to update profile"), HttpStatus.OK);
+//		}
+		
+	}
+	
+	
 }
