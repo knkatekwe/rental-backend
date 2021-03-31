@@ -41,7 +41,7 @@ public class OfferController {
     private UserRepository userRepo;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Offer> getAllProperties() {
+    public List<Offer> getAllOffers() {
         return offerRepo.findAll();
     }
 	
